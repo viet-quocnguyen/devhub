@@ -11,17 +11,6 @@ const validateLogin = require("../../validation/login");
 const validateRegister = require("../../validation/register");
 
 /**
- * @route   GET api/users/test
- * @desc    Test users route
- * @access  Public
- */
-router.get("/test", (req, res) => {
-  res.json({
-    message: "Users"
-  });
-});
-
-/**
  * @route   POST api/users/register
  * @desc    Register user
  * @access  Public

@@ -4,7 +4,7 @@ function isEmpty(obj) {
   return Object.keys(obj).length === 0;
 }
 
-module.exports = validateInput = data => {
+module.exports = validateLogin = data => {
   let errors = {};
 
   if (!validator.isEmail(data.email)) {
