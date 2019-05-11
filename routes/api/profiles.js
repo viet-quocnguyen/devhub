@@ -7,17 +7,6 @@ const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 
 /**
- * @route   GET api/profiles/test
- * @desc    Test profiles route
- * @access  Public
- */
-router.get("/test", (req, res) => {
-  res.json({
-    message: "Profiles"
-  });
-});
-
-/**
  * @route   GET api/profiles/
  * @desc    Get current user profile
  * @access  Private
@@ -60,7 +49,7 @@ router.get("/handle/:handle", (req, res) => {
 
 /**
  * @route   GET api/profiles/user/:id
- * @desc    Get profile by handle
+ * @desc    Get profile by id
  * @access  Public
  */
 router.get("/user/:id", (req, res) => {
