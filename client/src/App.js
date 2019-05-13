@@ -1,18 +1,26 @@
 import jwt_decode from "jwt-decode";
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
 import { Provider } from "react-redux";
 
 import store from "./store";
 import { setAuthToken } from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/authActions";
 import { logoutUser } from "./actions/authActions";
+import { clearCurrentProfile } from "./actions/profileActions";
 
 import Navbar from "./components/layouts/Navbar";
 import Landing from "./components/layouts/Landing";
 import Footer from "./components/layouts/Footer";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import Dashboard from "./components/dashboard/Dashboard";
+import CreateProfile from "./components/create-profile/CreateProfile";
 
 import "./App.css";
 
@@ -25,7 +33,9 @@ if (localStorage.jwtToken) {
   // Check for expired token
   const currentTime = Date.now() / 1000;
   if (user.exp < currentTime) {
-    store.dispatch(logoutUser);
+    alert("Your session has ended!");
+    store.dispatch(clearCurrentProfile());
+    store.dispatch(logoutUser());
     window.location.href = "/login";
   }
 }
@@ -37,9 +47,24 @@ function App() {
         <div className="App">
           <Navbar />
           <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
+            <Route
+              exact
+              path="/"
+              render={() =>
+                store.getState().auth.isAuthenticated ? (
+                  <Redirect to="/dashboard" />
+                ) : (
+                  <Landing />
+                )
+              }
+            />
+            {/* <Route exact path="/" component={Landing} /> */}
+            <div className="container">
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/dashboard" component={Dashboard} />
+              <Route exact path="/create-profile" component={CreateProfile} />
+            </div>
           </Switch>
 
           <Footer />

@@ -6,6 +6,8 @@ const passport = require("passport");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 
+const validateProfile = require("../../validation/profile");
+
 /**
  * @route   GET api/profiles/
  * @desc    Get current user profile
@@ -96,7 +98,6 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const errors = {};
     const profileFields = {};
     profileFields.user = req.user.id;
     profileFields.handle = req.body.handle;
@@ -104,6 +105,11 @@ router.post(
     profileFields.status = req.body.status;
     profileFields.bio = req.body.bio;
     profileFields.github = req.body.github;
+
+    const { errors, isValid } = validateProfile(profileFields);
+    if (!isValid) {
+      return res.status(401).json(errors);
+    }
 
     if (typeof req.body.skills !== "undefined") {
       profileFields.skills = req.body.skills.split(",");
