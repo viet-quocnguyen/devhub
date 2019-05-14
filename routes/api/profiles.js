@@ -43,7 +43,7 @@ router.get("/handle/:handle", (req, res) => {
     .then(profile => {
       if (!profile) {
         errors.profile = "There is no profile for this user";
-        res.status(404).json(errors);
+        return res.status(404).json(errors);
       }
       res.json(profile);
     });
@@ -141,6 +141,27 @@ router.post(
         });
       }
     });
+  }
+);
+
+/**
+ * @route   DELETE api/profiles/
+ * @desc    Delete user profile and account
+ * @access  Private
+ */
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOneAndDelete({ user: req.user.id })
+      .then(() => {
+        User.findOneAndDelete({ _id: req.user.id }).then(() =>
+          res.json({ success: true })
+        );
+      })
+      .catch(err => {
+        res.status(500).json(err);
+      });
   }
 );
 

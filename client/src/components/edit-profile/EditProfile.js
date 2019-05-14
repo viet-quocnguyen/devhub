@@ -7,8 +7,9 @@ import { connect } from "react-redux";
 import TextField from "../common/TextField";
 import TextArea from "../common/TextArea";
 // Actions
-import { createProfile } from "../../actions/profileActions";
-class CreateProfile extends Component {
+import { createProfile, getCurrentProfile } from "../../actions/profileActions";
+
+class EditProfile extends Component {
   constructor() {
     super();
     this.state = {
@@ -26,13 +27,27 @@ class CreateProfile extends Component {
   componentDidMount() {
     if (!this.props.auth.isAuthenticated) {
       this.props.history.push("/login");
+    } else {
+      this.props.getCurrentProfile();
+      if (this.props.profile.profile) {
+        const profile = this.props.profile.profile;
+        const skills = profile.skills.join(",");
+        this.setState({
+          ...this.state,
+          handle: profile.handle,
+          company: profile.company,
+          status: profile.status,
+          skills: skills,
+          bio: profile.bio,
+          github: profile.github
+        });
+      }
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (Object.keys(nextProps.errors).length > 0) {
       this.setState({
-        ...this.state,
         errors: nextProps.errors
       });
     }
@@ -44,6 +59,7 @@ class CreateProfile extends Component {
       [e.target.name]: e.target.value
     });
   }
+
   handleSubmit(e) {
     e.preventDefault();
     const profile = {
@@ -67,21 +83,22 @@ class CreateProfile extends Component {
               <Link to="/dashboard" className="btn btn-light">
                 Go Back
               </Link>
-              <h1 className="display-4 text-center">Create Your Profile</h1>
+              <h1 className="display-4 text-center">Edit Your Profile</h1>
               <p className="lead text-center">Enter your information:</p>
               <small className="d-block pb-3 text-danger">
                 * = required fields
               </small>
               <form onSubmit={this.handleSubmit}>
-                <TextField
-                  type="text"
-                  placeholder="Enter your handle"
-                  name="handle"
-                  value={this.state.handle}
-                  onChange={this.handleChange}
-                  info="* A unique handle for your profile URL. (This CAN'T be changed later)"
-                  error={errors.handle}
-                />
+                <div className="form-group">
+                  <input
+                    className="form-control form-control-lg"
+                    value={this.state.handle}
+                    disabled="true"
+                  />
+                  <small className="form-text text-muted">
+                    This is your handle
+                  </small>
+                </div>
                 <TextField
                   type="text"
                   placeholder="Enter your company"
@@ -117,7 +134,7 @@ class CreateProfile extends Component {
                 />
                 <TextField
                   type="text"
-                  placeholder="Enter your github username"
+                  placeholder="Enter your github url"
                   name="github"
                   value={this.state.github}
                   onChange={this.handleChange}
@@ -136,18 +153,20 @@ class CreateProfile extends Component {
   }
 }
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object,
-  createProfile: PropTypes.func.isRequired
+  createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  profile: state.profile
 });
 
 export default connect(
   mapStateToProps,
-  { createProfile }
-)(withRouter(CreateProfile));
+  { createProfile, getCurrentProfile }
+)(withRouter(EditProfile));
