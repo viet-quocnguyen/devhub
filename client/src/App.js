@@ -24,6 +24,7 @@ import CreateProfile from "./components/create-profile/CreateProfile";
 import EditProfile from "./components/edit-profile/EditProfile";
 import Profiles from "./components/profiles/Profiles";
 import Profile from "./components/profile/Profile";
+import Posts from "./components/posts/Posts";
 
 import "./App.css";
 
@@ -70,6 +71,7 @@ function App() {
               <Route exact path="/edit-profile" component={EditProfile} />
               <Route exact path="/profiles" component={Profiles} />
               <Route exact path="/profile/:handle" component={Profile} />
+              <Route exact path="/feed" component={Posts} />
             </div>
           </Switch>
 
