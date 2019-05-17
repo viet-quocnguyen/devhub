@@ -1,4 +1,5 @@
-module.exports = {
-  database_url: "mongodb://qvnguyen:gunnervn3@ds151626.mlab.com:51626/devhub",
-  secretKey: "secret"
-};
+if (process.env.NODE_ENV === "production") {
+  module.exports = require("./keys_prod");
+} else {
+  module.exports = require("./keys_dev");
+}
