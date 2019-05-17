@@ -14,7 +14,6 @@ const validatePost = require("../../validation/post");
 router.get("/", (req, res) => {
   Post.find()
     .sort({ date: -1 })
-    .populate("likes.user", ["name"])
     .then(posts => res.json(posts))
     .catch(err => res.status(404).json({ post: "No post found" }));
 });
@@ -26,6 +25,7 @@ router.get("/", (req, res) => {
  */
 router.get("/:id", (req, res) => {
   Post.findById(req.params.id)
+    .populate("comments.user")
     .then(post => res.json(post))
     .catch(err => res.status(404).json({ post: "No post found" }));
 });
@@ -92,6 +92,10 @@ router.post(
   "/comment/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const { errors, isValid } = validatePost(req.body);
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
     Post.findById(req.params.id)
       .then(post => {
         let newComment = {
@@ -147,7 +151,7 @@ router.delete(
         if (comment.length == 0) {
           return res.status(404).json({ comment: "No comment found" });
         }
-        if (!(comment.user == req.user.id || post.user == req.user.id)) {
+        if (!(comment[0].user == req.user.id || post.user == req.user.id)) {
           return res.status(401).json({ comment: "Unauthorized" });
         }
         post.comments = post.comments.filter(comment => {

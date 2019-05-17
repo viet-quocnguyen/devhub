@@ -7,8 +7,8 @@ function isEmpty(obj) {
 module.exports = validatePost = data => {
   let errors = {};
 
-  if (!validator.isLength(data.text, { min: 10, max: 300 })) {
-    errors.text = "Text must be betwwen 10 and 300 characters";
+  if (!validator.isLength(data.text, { min: 3, max: 300 })) {
+    errors.text = "Text must be betwwen 3 and 300 characters";
   }
   if (validator.isEmpty(data.text)) {
     errors.text = "Text must not be empty";
