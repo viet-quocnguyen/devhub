@@ -1,6 +1,7 @@
 # Devhub - A social network for developers
 
 A small platform like LinkedIn for developers to show their profiles, add posts, add comments and connect with others.
+![screenshot](https://user-images.githubusercontent.com/25848067/59732772-94374a80-9219-11e9-887d-1db27af9fad9.JPG)
 
 ## Deployment
 
