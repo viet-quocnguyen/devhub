@@ -14,7 +14,7 @@ You could see the live demo of this project [here](https://devhubapp.herokuapp.c
 ![devhub_inapp](https://user-images.githubusercontent.com/25848067/65382119-59d3c280-dccc-11e9-837e-f26d96e8a886.JPG)
 
 ### Built With
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+
 * **Front-end** - React, Redux, Bootstrap, HTML/CSS
 * **Back-end** - Node.js, Express
 * **Database** - MongoDB
